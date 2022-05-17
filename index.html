@@ -1,0 +1,274 @@
+<script type="importmap">
+	{
+		"imports": {
+			"three": "./three.module.js"
+		}
+	}
+</script>
+<script type="module">
+import * as three_1 from './three.module.js';
+
+import * as OrbitControls_1 from './OrbitControls.js';
+import * as GLTFLoader_1 from './GLTFLoader.js';
+import * as DRACOLoader_1 from './/DRACOLoader.js';
+
+var Model = /** @class */ (function () {
+    /**
+     * Based off the three.js docs: https://threejs.org/examples/?q=cube#webgl_geometry_cube
+     */
+    function Model(_a) {
+        var _this = this;
+        var dom = _a.dom, loader = _a.loader, rightWeapon = _a.rightWeapon, leftWeapon = _a.leftWeapon, translateY = _a.translateY, cam = _a.cam, arenaBg = _a.arenaBg, globalScale = _a.globalScale, lemonSettings = _a.lemonSettings, background = _a.background, _b = _a.rotate, rotate = _b === void 0 ? true : _b, callback = _a.callback;
+        this.domThreejs = dom;
+        this.camera = new three_1.PerspectiveCamera(cam, this.domThreejs.offsetWidth / this.domThreejs.offsetHeight);
+        this.domLoader = loader;
+        this.sceneObjects = {};
+        this.sceneLights = {};
+        this.isAnimating = false;
+        this.lemonSettings = lemonSettings;
+        this.isArena = arenaBg;
+        this.clock = new three_1.Clock();
+        this.scene = new three_1.Scene();
+        this.scene.translateY(translateY);
+        this.mixer = new three_1.AnimationMixer(this.scene);
+        this.scale = 0.020;
+        this.weaponCoord = [101.12, 101.05, 0];
+        this.light = 3.8;
+        var manager = new three_1.LoadingManager();
+        manager.onProgress = function (item, loaded, total) {
+            var percents = (loaded / total * 100) + '%';
+            console.log(percents);
+        };
+        this.loader = new GLTFLoader_1.GLTFLoader(manager);
+        var dracoLoader = new DRACOLoader_1.DRACOLoader();
+        dracoLoader.setDecoderPath('/draco/');
+        this.loader.setDRACOLoader(dracoLoader);
+        this.animatedObjects = new three_1.AnimationObjectGroup();
+        // this.loader.load(`/constructor/assets/lemons/anim/ThirdPersonIdle1.glb`, (anim) => {
+        //   animation = anim
+        Object.entries(this.lemonSettings.model).forEach(function (_a) {
+            var key = _a[0], model = _a[1];
+            _this.loader.load("/models/".concat(key, "/").concat(model, ".glb"), function (gltf) {
+                _this.addObject(gltf, key);
+                var action = _this.mixer.clipAction(gltf.animations[0]);
+                action.play();
+                // const animationAction = this.mixer.clipAction(gltf.animations[0], gltf.scene)
+                // animationAction.play();
+            });
+        });
+        //   this.addObject(anim, 'anim')
+        // });
+        // this.loader.load(leftWeapon, (gltf) => {
+        //   this.addObject(gltf, 'leftWeapon')
+        // });
+        // this.loader.load(rightWeapon, (gltf) => {
+        //   gltf.scene.scale.multiply(new Vector3(-1, 1, 1))
+        //   this.addObject(gltf, 'rightWeapon')
+        // });
+        this.renderer = new three_1.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+        this.renderer.outputEncoding = three_1.sRGBEncoding;
+        this.renderer.physicallyCorrectLights = true;
+        this.renderer.toneMappingExposure = 0.5;
+        this.renderer.setClearColor(0x000000, 0); // the default
+        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setSize(this.domThreejs.offsetWidth, this.domThreejs.offsetHeight);
+        this.controls = new OrbitControls_1.OrbitControls(this.camera, this.domThreejs);
+        this.camera.position.set(0, 0, 25);
+        this.controls.update();
+        this.controls.enablePan = false;
+        if (this.isArena) {
+            this.controls.minDistance = 25;
+            this.controls.maxDistance = 35;
+            //this.camera.setViewOffset(this.dom.offsetWidth, this.dom.offsetHeight, this.dom.offsetWidth / 7, 0, this.dom.offsetWidth, this.dom.offsetHeight)
+            this.scene.background = new three_1.CubeTextureLoader()
+                .setPath('/img/arena/')
+                .load([
+                'px.png',
+                'nx.png',
+                'py.png',
+                'ny.png',
+                'pz.png',
+                'nz.png'
+            ]);
+            this.loader.load('/constructor/assets/models/platform_big.glb', function (gltf) {
+                gltf.scene.name = 'postament';
+                gltf.scene.position.setY(0.25);
+                gltf.scene.scale.set(0.7, 0.7, 0.7);
+                _this.scene.add(gltf.scene);
+            });
+            this.controls.maxPolarAngle = Math.PI / 1.7;
+        }
+        else {
+            this.controls.minPolarAngle = Math.PI / 2;
+            this.controls.maxPolarAngle = Math.PI / 2;
+            if (!rotate) {
+                this.controls.minAzimuthAngle = 0;
+                this.controls.maxAzimuthAngle = 0;
+            }
+            this.controls.enableZoom = false;
+            //this.controls.autoRotate = true;
+        }
+        if (background) {
+            var map = new three_1.TextureLoader(manager).load(background);
+            this.scene.background = map;
+        }
+        this.scene.scale.set(globalScale, globalScale, globalScale);
+        this.sceneLights.light1 = new three_1.DirectionalLight(0xFFFFFF);
+        this.sceneLights.light2 = new three_1.DirectionalLight(0xFFFFFF);
+        this.setLightSettings();
+        this.scene.add(this.sceneLights.light1);
+        this.scene.add(this.sceneLights.light2);
+        manager.onLoad = function () {
+            _this.domThreejs.appendChild(_this.renderer.domElement);
+            _this.domLoader.style.opacity = '0';
+            if (callback)
+                callback();
+            window.addEventListener("resize", _this.onWindowResize.bind(_this), false);
+            if (!_this.isAnimating) {
+                _this.animate();
+                _this.isAnimating = true;
+            }
+        };
+    }
+    Model.prototype.changeLemon = function (lemonSettings) {
+        return __awaiter(this, void 0, Promise, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                this.domLoader.style.opacity = '1';
+                this.lemonSettings = lemonSettings;
+                return [2 /*return*/, new Promise(function (resolve) {
+                        Object.entries(lemonSettings.model).forEach(function (_a) {
+                            var key = _a[0], model = _a[1];
+                            _this.scene.remove(_this.sceneObjects[key]);
+                            _this.loader.load("/models/".concat(key, "/").concat(model, ".glb"), function (gltf) {
+                                //this.animatedObjects.add(gltf.scene)
+                                _this.addObject(gltf, key);
+                                resolve();
+                            });
+                        });
+                    })];
+            });
+        });
+    };
+    Model.prototype.screenShot = function (name) {
+        var _this = this;
+        setTimeout(function () {
+            var imgData = _this.renderer.domElement.toDataURL("image/png");
+            //window.location.href = imgData.replace("image/png", "image/octet-stream")
+            var link = document.createElement('a');
+            link.download = "".concat(name, ".png");
+            link.href = imgData;
+            link.click();
+            link.remove();
+        }, 200);
+    };
+    Model.prototype.addObject = function (gltf, name) {
+        var object = gltf.scene;
+        this.sceneObjects[name] = object;
+        object.name = name;
+        this.setObjectSettings(object);
+        this.scene.add(object);
+    };
+    Model.prototype.setObjectSettings = function (object) {
+        if (object.name == 'leftWeapon') {
+            object.position.set(this.weaponCoord[0], this.weaponCoord[1], this.weaponCoord[2]);
+        }
+        else if (object.name == 'rightWeapon') {
+            object.position.set(this.weaponCoord[0] * -1, this.weaponCoord[1], this.weaponCoord[2]);
+        }
+        else {
+            object.scale.set(this.scale, this.scale, this.scale);
+        }
+    };
+    Model.prototype.setLightSettings = function () {
+        var camPos = this.camera.position;
+        this.sceneLights.light1.position.set(camPos.x, camPos.y + 50, camPos.z);
+        this.sceneLights.light2.position.set(camPos.x, camPos.y + -10, camPos.z);
+        this.sceneLights.light1.intensity = this.light;
+        this.sceneLights.light2.intensity = this.light - 1.5;
+    };
+    Model.prototype.changeEquipment = function (name, item) {
+        return __awaiter(this, void 0, Promise, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                this.domLoader.style.opacity = '1';
+                return [2 /*return*/, new Promise(function (resolve) {
+                        var objectToRemove = _this.scene.getObjectByName(name);
+                        _this.loader.load(item.model, function (gltf) {
+                            gltf.scene.scale.set(item.scale, item.scale, item.scale);
+                            _this.scene.remove(objectToRemove);
+                            _this.addObject(gltf, name);
+                            resolve();
+                        });
+                    })];
+            });
+        });
+    };
+    Model.prototype.onWindowResize = function () {
+        this.camera.aspect = this.domThreejs.offsetWidth / this.domThreejs.offsetHeight;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(this.domThreejs.offsetWidth, this.domThreejs.offsetHeight);
+    };
+    Model.prototype.animate = function () {
+        requestAnimationFrame(this.animate.bind(this));
+        var delta = this.clock.getDelta();
+        this.mixer.update(delta);
+        this.controls.update();
+        this.sceneLights.light1.position.set(this.camera.position.x, this.camera.position.y + 50, this.camera.position.z);
+        this.sceneLights.light2.position.set(this.camera.position.x, this.camera.position.y - 10, this.camera.position.z);
+        this.renderer.render(this.scene, this.camera);
+    };
+    return Model;
+}());
+
+window.models = [];
+
+[
+	'BTLMN_ARM1_A1',
+	'BTLMN_ARM1_A2',
+	'BTLMN_ARM1_A3',
+	'BTLMN_ARM1_A4',
+	//'dowload_building'
+].forEach(modelName => {
+	let box = document.createElement('div');
+	box.id = 'model_' + modelName;
+
+	lemons.appendChild(box);
+
+	window.models.push(new Model({
+		dom: box,
+		lemonSettings: {model: {full: modelName}},
+		loader: loader,
+		cam: 12,
+		translateY: -1,
+		globalScale: .75,
+		arenaBg: false,
+		rotate: false
+	}));
+});
+
+</script>
+<div id="loader"></div>
+<style>
+	body {
+		margin: 0;
+		padding: 0;
+		background: #000;
+		overflow: hidden;
+	}
+
+	#lemons {
+		display: flex;
+		height: 100%;
+		align-items: center;
+	}
+
+	#lemons>div {
+		max-width: 35vw;
+		width: 35vw;
+		margin: 0 -5vw;
+		height: 25vw;
+	}
+
+</style>
+<div id="lemons"></div>
