@@ -108,16 +108,38 @@ svg {
 	position: relative;
 }
 
-.footer .contact-links {
-	position: absolute;
-	right: 0;
-}
-
 .platforms {
 	margin: auto;
 }
 
 #downloadBox {
+	width: 290px;
+	text-align: right;
+}
+
+#downloadBox img {
 	width: 200px;
-	height: 200px;
+	margin-top: -50px;
+}
+
+.btn-light {
+    background-color: transparent;
+    border-color: #fffc;
+    color: #fff;
+    font-size: 1rem;
+
+}
+
+.btn-light:focus {
+    background: transparent;
+    color: #fff
+}
+
+.btn-light.active {
+    background: #fff;
+    color: #000
+}
+
+.footer .contact-links {
+	margin-left: 0;
 }
