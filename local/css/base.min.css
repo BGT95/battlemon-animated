@@ -154,3 +154,12 @@ a:hover {
 	color: #000;
 	background: #fff;
 }
+
+body {
+	background: url("/bg/Fon - mount - no.png");
+	background-size: cover;
+}
+
+.footer {
+	background: transparent;
+}
