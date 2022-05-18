@@ -110,6 +110,7 @@ svg {
 
 .platforms {
 	margin: auto;
+	margin-bottom: 0;
 }
 
 #downloadBox {
@@ -142,4 +143,5 @@ svg {
 
 .footer .contact-links {
 	margin-left: 0;
+	margin-top: auto;
 }
