@@ -186,3 +186,7 @@ body {
 .footer .contact-links li:not(:first-child) {
     margin-left: 20px;
 }
+
+#lemons canvas {
+  margin-top: 10vh;
+}
