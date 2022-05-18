@@ -182,3 +182,7 @@ body {
 	margin: 0 -5vw;
 	height: 30vw;
 }
+
+.footer .contact-links li:not(:first-child) {
+    margin-left: 20px;
+}
