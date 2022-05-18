@@ -36,15 +36,6 @@ a,input{color:inherit}.card-preview,.sales,.tabs,header,html,sup{position:relati
 	height: 100%;
 }
 
-/*.plug-media video {*/
-/*	width: 100vw;*/
-/*}*/
-
-/*.platforms li:not(:first-child):hover,*/
-/*.contact-links li:hover{*/
-/*    opacity: 1;*/
-/*}*/
-
 body {
     background-image: none;
 }
@@ -95,27 +86,6 @@ svg {
     height: 26px;
 }
 
-/*@media screen and (max-width: 480px) {*/
-/*  video:not(.v360) {*/
-/*    display: none;*/
-/*  }*/
-/*}*/
-/*@media screen and (min-width: 481px) and (max-width: 720px)  {*/
-/*  video:not(.v480) {*/
-/*    display: none;*/
-/*  }*/
-/*}*/
-/*@media screen and (min-width: 721px) and (max-width: 1080px) {*/
-/*  video:not(.v720) {*/
-/*    display: none;*/
-/*  }*/
-/*}*/
-/*@media screen and (min-width: 1081px) {*/
-/*  video:not(.v1080) {*/
-/*    display: none;*/
-/*  }*/
-/*}*/
-
 .logo {
 	/*position: fixed;*/
   margin-left: .5vw;
@@ -132,4 +102,22 @@ svg {
 
 .footer {
 	padding: 30px 0;
+}
+
+.footer-inner {
+	position: relative;
+}
+
+.footer .contact-links {
+	position: absolute;
+	right: 0;
+}
+
+.platforms {
+	margin: auto;
+}
+
+#downloadBox {
+	width: 200px;
+	height: 200px;
 }
