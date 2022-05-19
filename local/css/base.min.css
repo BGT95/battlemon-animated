@@ -1821,4 +1821,10 @@ body {
 	#downloadBox {
 		margin: 0;
 	}
+	
+	#lemons > div {
+		width: calc(100vw - 40px);
+		margin: 0;
+		height: calc(90vh - 90px - 257px);
+	}
 }
