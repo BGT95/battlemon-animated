@@ -114,13 +114,12 @@ svg {
 }
 
 #downloadBox {
-	width: 290px;
 	text-align: right;
 }
 
 #downloadBox img {
-	width: 260px;
-	margin-top: -50px;
+	width: 150px;
+	margin-top: -30px;
 }
 
 .btn-light {
@@ -156,7 +155,7 @@ a:hover {
 }
 
 body {
-	background: url("/bg/Fon - mount - no.png");
+	background: url("/bg/Fon - mount - no - 001.jpg");
 	background-size: cover;
 }
 
