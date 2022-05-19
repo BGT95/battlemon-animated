@@ -1797,18 +1797,24 @@ body {
 		margin: 0;
 	}
 	
+	.footer-inner {
+		-webkit-flex-direction: column;
+		-moz-flex-direction: column;
+		-ms-flex-direction: column;
+		-o-flex-direction: column;
+		flex-direction: column;
+		-ms-align-items: center;
+		align-items: center;
+		justify-content: flex-start;
+	}
 	
 	.footer .contact-links,
 	.platforms {
 		margin: 0;
 	}
 	
-	.downloadBox img {
+	#downloadBox img {
 		margin-top: 0;
 		max-width: 70px;
 	}
-}
-
-.header-inner {
-	
 }
