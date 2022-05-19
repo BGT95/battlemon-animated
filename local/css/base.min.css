@@ -1708,9 +1708,8 @@ svg {
 	text-align: right;
 }
 
-#downloadBox img {
+#downloadBox canvas {
 	width: 150px;
-	margin-top: -30px;
 }
 
 .btn-light {
@@ -1781,6 +1780,12 @@ body {
 	margin-top: 10vh;
 }
 
+#downloadBox {
+	width: 200px;
+	height: 200px;
+	margin-right: -15px;
+}
+
 @media screen and (max-width: 768px) {
 	.header-inner {
 		display: -webkit-flex;
@@ -1812,9 +1817,8 @@ body {
 	.platforms {
 		margin: 0;
 	}
-	
-	#downloadBox img {
-		margin-top: 0;
-		max-width: 70px;
+
+	#downloadBox {
+		margin: 0;
 	}
 }
