@@ -1609,6 +1609,10 @@ header.fixed .header-inner .nav-toggle.active .line:nth-child(3) {
 	margin-top: -6px;
 }
 
+.platforms li:first-child {
+	padding-right: 5px;
+}
+
 .platforms li:not(:first-child) {
 	margin-left: 15px;
 }
