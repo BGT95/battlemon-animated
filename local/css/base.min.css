@@ -1778,10 +1778,6 @@ body {
 	margin-left: 20px;
 }
 
-#lemons canvas {
-	margin-top: 10vh;
-}
-
 #downloadBox {
 	width: 230px;
 	height: 230px;
@@ -1839,10 +1835,5 @@ body {
 		justify-content: center;
 		display: flex;
 
-	}
-
-	#lemons canvas {
-		max-width: 100vw;
-		max-height: 60vh;
 	}
 }
