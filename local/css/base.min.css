@@ -1610,6 +1610,7 @@ header.fixed .header-inner .nav-toggle.active .line:nth-child(3) {
 }
 
 .platforms li:first-child {
+	padding-left: 37px;
 	padding-right: 5px;
 }
 
