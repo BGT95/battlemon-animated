@@ -1827,4 +1827,23 @@ body {
 		margin: 0;
 		height: calc(90vh - 90px - 257px);
 	}
+<<<<<<< Updated upstream
+=======
+}
+
+@media screen and (min-width: 769px) {
+	#lemons > div {
+		position: fixed;
+		inset: 0;
+		align-items: center;
+		justify-content: center;
+		display: flex;
+
+	}
+
+	#lemons canvas {
+		max-width: 80vw;
+		max-height: 70vh;
+	}
+>>>>>>> Stashed changes
 }
