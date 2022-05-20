@@ -1610,11 +1610,7 @@ header.fixed .header-inner .nav-toggle.active .line:nth-child(3) {
 }
 
 .platforms li:not(:first-child) {
-	margin-left: 30px;
-}
-
-.platforms li:first-child {
-	padding-right: 10px;
+	margin-left: 15px;
 }
 
 .plug-page main,
